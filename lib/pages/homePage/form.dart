@@ -1,15 +1,44 @@
+import 'package:cesta/api_response.dart';
+import 'package:cesta/database/mercado_api.dart';
+import 'package:cesta/model/mercado.dart';
+import 'package:cesta/pages/loginPage/alerta.dart';
 import 'package:cesta/widgets/app_text.dart';
 import 'package:flutter/material.dart';
 
 import 'home_page.dart';
 
-class Formulario extends StatelessWidget {
+class Formulario extends StatefulWidget {
+  final Mercado mercado;
+
+  Formulario({this.mercado});
+
+  @override
+  _FormularioState createState() => _FormularioState();
+}
+
+class _FormularioState extends State<Formulario> {
   final _produto = TextEditingController();
   final _tcategoria = TextEditingController();
   final _tnomeMercado = TextEditingController();
   final _tpreco = TextEditingController();
   final _tNomeColaborador = TextEditingController();
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
+
+  var _showProgress = false;
+
+  Mercado get mercado => widget.mercado;
+
+  @override
+  void initState() {
+    super.initState();
+    if (mercado != null) {
+      _produto.text = mercado.produto;
+      _tcategoria.text = mercado.categoria;
+      _tnomeMercado.text = mercado.nomeMercado;
+      double preco = double.tryParse(_tpreco.text);
+      _tNomeColaborador.text = mercado.nomeMercado;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -123,29 +152,43 @@ class Formulario extends StatelessWidget {
         ),
         onPressed: () {
           _onClickEnviado(context);
-          if(!_key.currentState.validate()){
-           return;
-          }else{
-             Navigator.pop(
-              context, MaterialPageRoute(builder: (context) => HomePage()));
-          }
-          
         },
       ),
     );
   }
 
-  _onClickEnviado(context) {
+  _onClickEnviado(context) async {
     if (!_key.currentState.validate()) {
       return;
     }
 
-    final produto = _produto.text;
-    final double preco = double.tryParse(_tpreco.text);
-    final categoria = _tcategoria.text;
-    final nomerMercado = _tnomeMercado.text;
-    final colaborador = _tNomeColaborador.text;
+    // Cria os dados
+    var c = mercado ?? Mercado();
+    c.categoria = _tcategoria.text;
+    c.colaborador = _tNomeColaborador.text;
+    c.produto = _produto.text;
+    c.preco = double.tryParse(_tpreco.text);
+    c.nomeMercado = _tnomeMercado.text;
 
-    print("produto: $produto  preco:$preco");
+    print("Mercado: $c");
+
+    setState(() {
+      _showProgress = true;
+    });
+
+    print("Salvar o carro $c");
+
+    ApiResponse<bool> response = await MercadoApi.saveMercado(c);
+    if (response.ok) {
+      alert(context, "Dados salvos com sucesso", callback: () {
+        Navigator.pop(context);
+      });
+    } else {
+      alert(context, response.msg);
+    }
+    setState(() {
+      _showProgress = false;
+    });
+    print("Fim.");
   }
 }

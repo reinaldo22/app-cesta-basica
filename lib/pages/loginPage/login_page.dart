@@ -24,12 +24,12 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-     Future<Usuario> future = Usuario.get();
-     future.then((Usuario user){
-       if(user != null){
+    Future<Usuario> future = Usuario.get();
+    future.then((Usuario user) {
+      if (user != null) {
         rotas(context, HomePage(), replace: true);
-       }
-     });
+      }
+    });
   }
 
   @override
@@ -93,7 +93,10 @@ class _LoginPageState extends State<LoginPage> {
                     "Login",
                     onPressed: _onClickLogin,
                     showProgress: _showProgress,
-                  )
+                  ),
+            SizedBox(
+              height: 20,
+            ),
           ],
         ));
   }
@@ -119,21 +122,21 @@ class _LoginPageState extends State<LoginPage> {
     }
 
     /* if (login.isEmpty || senha.isEmpty) {
-      showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: Text("Erro"),
-              content: Text("Login e/ ou senha inválidos"),
-              actions: <Widget>[
-                FlatButton(
-                  child: Text("Ok"),
-                  onPressed: () {},
-                )
-              ],
-            );
-          });
-    }
-  }*/
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: Text("Erro"),
+                            content: Text("Login e/ ou senha inválidos"),
+                            actions: <Widget>[
+                              FlatButton(
+                                child: Text("Ok"),
+                                onPressed: () {},
+                              )
+                            ],
+                          );
+                        });
+                  }
+                }*/
   }
 }
