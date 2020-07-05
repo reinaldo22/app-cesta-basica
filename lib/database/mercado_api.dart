@@ -2,7 +2,7 @@ import 'dart:convert' as convert;
 import 'package:cesta/model/usuario.dart';
 import 'package:http/http.dart' as http;
 import 'package:cesta/model/mercado.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 
 class MercadoApi {
   static Future<List<Mercado>> getMercado() async {

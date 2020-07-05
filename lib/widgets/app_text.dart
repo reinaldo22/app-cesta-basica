@@ -40,7 +40,7 @@ class AppText extends StatelessWidget {
       },
       style: TextStyle(
         fontSize: 22,
-        color: Colors.blue,
+        color: Colors.black,
       ),
       decoration: InputDecoration(
 //        border: OutlineInputBorder(

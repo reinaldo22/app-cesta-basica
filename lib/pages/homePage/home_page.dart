@@ -1,6 +1,7 @@
 import 'package:cesta/blocs/mercado_bloc.dart';
 import 'package:cesta/model/mercado.dart';
 import 'package:cesta/pages/homePage/form.dart';
+import 'package:cesta/widgets/text.dart';
 import 'package:flutter/material.dart';
 
 import 'drawer.dart';
@@ -83,16 +84,10 @@ class _HomePageState extends State<HomePage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(
-                      "Produto:" + m.produto,
-                      style: TextStyle(fontSize: 20),
-                    ),
-                    Text("Mercado:" + m.nomeMercado,
-                        style: TextStyle(fontSize: 20)),
-                    Text("Colaborador:" + m.colaborador,
-                        style: TextStyle(fontSize: 20)),
-                    Text("Preço: " + m.preco.toString(),
-                        style: TextStyle(fontSize: 20)),
+                    text("Mercado: " + m.nomeMercado, fontSize: 20),
+                    text("Produto: " + m.produto, fontSize: 20),
+                    text("Colaborador: " + m.colaborador, fontSize: 20),
+                    text("Preço: " + m.preco.toString(), fontSize: 20),
                   ],
                 ),
               ),
