@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cesta/blocs/login_bloc.dart';
 import 'package:cesta/model/usuario.dart';
 import 'package:cesta/pages/homePage/home_page.dart';
@@ -14,12 +16,12 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final _streamController = StreamController<bool>();
   final _tLogin = TextEditingController();
   final _tSenha = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final bloc = LoginBloc();
   final _focusSenha = FocusNode();
-  bool _showProgress = false;
 
   @override
   void initState() {
@@ -85,15 +87,15 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(
               height: 20,
             ),
-            _showProgress
-                ? Center(
-                    child: CircularProgressIndicator(),
-                  )
-                : AppButton(
+            StreamBuilder<bool>(
+                stream: _streamController.stream,
+                builder: (context, snapshot) {
+                  return AppButton(
                     "Login",
                     onPressed: _onClickLogin,
-                    showProgress: _showProgress,
-                  ),
+                    showProgress: snapshot.data != null ? snapshot.data: false,
+                  );
+                }),
             SizedBox(
               height: 20,
             ),
@@ -109,9 +111,7 @@ class _LoginPageState extends State<LoginPage> {
     final login = _tLogin.text;
     final senha = _tSenha.text;
 
-    setState(() {
-      _showProgress = true;
-    });
+    _streamController.sink.add(true);
 
     var usuario = await bloc.login(login, senha);
 
@@ -120,6 +120,7 @@ class _LoginPageState extends State<LoginPage> {
     } else {
       alert(context, "Login Inválido");
     }
+    _streamController.sink.add(false);
 
     /* if (login.isEmpty || senha.isEmpty) {
                     showDialog(
@@ -138,5 +139,10 @@ class _LoginPageState extends State<LoginPage> {
                         });
                   }
                 }*/
+  }
+  @override
+  void dispose() {
+    super.dispose();
+    _streamController.close();
   }
 }

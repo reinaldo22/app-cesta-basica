@@ -1,5 +1,6 @@
 import 'dart:convert' as convert;
 import 'package:cesta/api_response.dart';
+import 'package:cesta/database/mercado_dao.dart';
 import 'package:cesta/model/usuario.dart';
 import 'package:http/http.dart' as http;
 import 'package:cesta/model/mercado.dart';
@@ -15,6 +16,7 @@ class MercadoApi {
     };
 
     var url = 'http://192.168.0.37:8080/mercado/';
+    print("GET>>>>$url");
 
     var response = await http.get(url, headers: headers);
 
@@ -22,10 +24,16 @@ class MercadoApi {
 
     List list = convert.json.decode(json);
     produtos = List<Mercado>();
+
     for (Map map in list) {
       Mercado mercadinhos = Mercado.fromJson(map);
       produtos.add(mercadinhos);
     }
+    final dao = MercadoDAO();
+    for (Mercado mer in produtos) {
+      dao.save(mer);
+    }
+
     return produtos;
   }
 

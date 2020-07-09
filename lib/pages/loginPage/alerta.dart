@@ -6,7 +6,7 @@ alert(BuildContext context, String msg, {Function callback}){
     context: context,
     builder: (context){
       return AlertDialog(
-      title: Text("Login"),
+      title: Text(msg),
       content: Text(msg),
       actions: <Widget>[
         FlatButton(

@@ -4,8 +4,7 @@ import 'package:cesta/model/mercado.dart';
 import 'package:cesta/pages/loginPage/alerta.dart';
 import 'package:cesta/widgets/app_text.dart';
 import 'package:flutter/material.dart';
-
-import 'home_page.dart';
+import 'package:flutter_masked_text/flutter_masked_text.dart';
 
 class Formulario extends StatefulWidget {
   final Mercado mercado;
@@ -17,10 +16,12 @@ class Formulario extends StatefulWidget {
 }
 
 class _FormularioState extends State<Formulario> {
+  var testecontroller = new MoneyMaskedTextController(
+      decimalSeparator: '.', thousandSeparator: ',');
   final _produto = TextEditingController();
   final _tcategoria = TextEditingController();
   final _tnomeMercado = TextEditingController();
-  final _tpreco = TextEditingController();
+  //final _tpreco = TextEditingController();
   final _tNomeColaborador = TextEditingController();
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
 
@@ -35,7 +36,7 @@ class _FormularioState extends State<Formulario> {
       _produto.text = mercado.produto;
       _tcategoria.text = mercado.categoria;
       _tnomeMercado.text = mercado.nomeMercado;
-      double preco = double.tryParse(_tpreco.text);
+      double preco = double.tryParse(testecontroller.text);
       _tNomeColaborador.text = mercado.nomeMercado;
     }
   }
@@ -100,7 +101,7 @@ class _FormularioState extends State<Formulario> {
             AppText(
               "Preço",
               "Ex: 2.50",
-              controller: _tpreco,
+              controller: testecontroller,
               validator: _validatePreco,
             ),
             SizedBox(
@@ -167,7 +168,7 @@ class _FormularioState extends State<Formulario> {
     c.categoria = _tcategoria.text;
     c.colaborador = _tNomeColaborador.text;
     c.produto = _produto.text;
-    c.preco = double.tryParse(_tpreco.text);
+    c.preco = double.tryParse(testecontroller.text);
     c.nomeMercado = _tnomeMercado.text;
 
     print("Mercado: $c");
