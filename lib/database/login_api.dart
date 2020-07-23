@@ -8,7 +8,7 @@ class LoginApi {
     try {
       //Usuario pessoa = new Usuario();
 
-      var url = 'http://192.168.0.37:8080/login';
+      var url = 'http://192.168.0.51:8080/login';
 
       Map<String, String> headers = {"Content-Type": "application/json"};
 

@@ -3,20 +3,20 @@ import 'package:cesta/model/mercado.dart';
 import 'package:sqflite/sqlite_api.dart';
 
 class MercadoDAO {
-  Future<Database> get db => DatabaseHelper.getInstance().database;
+  Future<Database> get db => DatabaseHelper.getInstance().db;
 
   Future<int> save(Mercado mercado) async {
     var dbClient = await db;
-    var id = await dbClient.insert("mercados", mercado.toMap(),
+    var id = await dbClient.insert("mercado", mercado.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace);
-    print('id: $id');
+    print('>>>>>>>>>>>>>>>>>>>>id: $id');
     return id;
   }
 
   Future<List<Mercado>> findAll() async {
     final dbClient = await db;
 
-    final list = await dbClient.rawQuery('select * from mercados');
+    final list = await dbClient.rawQuery('select * from mercado');
 
     final mercados =
         list.map<Mercado>((json) => Mercado.fromJson(json)).toList();
@@ -27,7 +27,7 @@ class MercadoDAO {
   Future<Mercado> findById(int id) async {
     var dbClient = await db;
     final list =
-        await dbClient.rawQuery('select * from mercados where id = ?', [id]);
+        await dbClient.rawQuery('select * from mercado where id = ?', [id]);
 
     if (list.length > 0) {
       return new Mercado.fromJson(list.first);
@@ -44,19 +44,19 @@ class MercadoDAO {
 
   Future<int> delete(int id) async {
     var dbClient = await db;
-    return await dbClient.rawDelete('delete from mercados where id = ?', [id]);
+    return await dbClient.rawDelete('delete from mercado where id = ?', [id]);
   }
 
   Future<int> deleteAll() async {
     var dbClient = await db;
-    return await dbClient.rawDelete('delete from mercados');
+    return await dbClient.rawDelete('delete from mercado');
   }
 
   Future<List<Mercado>> findAllByColaborador(String colaborador) async {
     final dbClient = await db;
 
     final list = await dbClient.rawQuery(
-        'select * from mercados where colaborador =? ', [colaborador]);
+        'select * from mercado where colaborador =? ', [colaborador]);
 
     final carros = list.map<Mercado>((json) => Mercado.fromJson(json)).toList();
 

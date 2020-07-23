@@ -7,7 +7,7 @@ import 'package:cesta/model/mercado.dart';
 
 class MercadoApi {
   static Future<List<Mercado>> getMercado() async {
-    List<Mercado> produtos;
+    
     Usuario user = await Usuario.get();
 
     Map<String, String> headers = {
@@ -15,7 +15,7 @@ class MercadoApi {
       "Authorization": "Bearer ${user.token}"
     };
 
-    var url = 'http://192.168.0.37:8080/mercado/';
+    var url = 'http://192.168.0.51:8080/mercado/';
     print("GET>>>>$url");
 
     var response = await http.get(url, headers: headers);
@@ -23,17 +23,11 @@ class MercadoApi {
     String json = response.body;
 
     List list = convert.json.decode(json);
-    produtos = List<Mercado>();
+    List<Mercado> produtos = list.map<Mercado>((map) => Mercado.fromJson(map)).toList();
+      
+   final dao = MercadoDAO();
 
-    for (Map map in list) {
-      Mercado mercadinhos = Mercado.fromJson(map);
-      produtos.add(mercadinhos);
-    }
-    final dao = MercadoDAO();
-    for (Mercado mer in produtos) {
-      dao.save(mer);
-    }
-
+    produtos.forEach(dao.save);
     return produtos;
   }
 
@@ -45,7 +39,7 @@ class MercadoApi {
       "Authorization": "Bearer ${user.token}"
     };
 
-    var url = 'http://192.168.0.37:8080/mercado/';
+    var url = 'http://192.168.0.51:8080/mercado/';
 
     print("POST>>>>>>>>>>>  $url");
 
